@@ -1,4 +1,4 @@
-import problems from "./problems.ts";
+import { problems } from "./problems.ts";
 
 for (const p of (Deno.args.length > 0)
     ? problems.filter(p => p.number === parseInt(Deno.args[0]))

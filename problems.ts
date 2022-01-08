@@ -1,10 +1,10 @@
-interface Problem {
+export interface Problem {
     number: number;
     title: string;
     solve: () => number;
 }
 
-const problems: Problem[] = [];
+export const problems: Problem[] = [];
 function add(number: number, title: string, solve: () => number) {
     problems.push({ number, title, solve });
 }
@@ -123,5 +123,3 @@ add(5, "Smallest multiple", () => {
         }
     }
 });
-
-export default problems;
