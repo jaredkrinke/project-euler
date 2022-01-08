@@ -1,16 +1,31 @@
-// import { assertEquals } from "https://deno.land/std@0.120.0/testing/asserts.ts";
+interface Problem {
+    number: number;
+    title: string;
+    solve: () => number;
+}
 
-Deno.test("1. Multiples of 3 or 5", () => {
+function log(p: Problem) {
+    console.log(`${p.number}. ${p.title}:`);
+    console.log(p.solve());
+    console.log();
+}
+
+const problems: Problem[] = [];
+function add(number: number, title: string, solve: () => number) {
+    problems.push({ number, title, solve });
+}
+
+add(1, "Multiples of 3 or 5", () => {
     let sum = 0;
     for (let i = 3; i < 1000; i++) {
         if ((i % 3) === 0 || (i % 5) === 0) {
             sum += i;
         }
     }
-    console.log(sum);
+    return sum;
 });
 
-Deno.test("2. Even Fibonacci numbers", () => {
+add(2, "Even Fibonacci numbers", () => {
     function* fib(): Iterable<number> {
         let pp = 0;
         let p = 1;
@@ -32,11 +47,10 @@ Deno.test("2. Even Fibonacci numbers", () => {
             sum += n;
         }
     }
-
-    console.log(sum);
+    return sum;
 });
 
-Deno.test("3. Largest prime factor", () => {
+add(3, "Largest prime factor", () => {
     const n = 600851475143;
 
     function primeOrZero(x: number): number {
@@ -56,5 +70,12 @@ Deno.test("3. Largest prime factor", () => {
             largestPrimeFactor = Math.max(largestPrimeFactor, primeOrZero(i), primeOrZero(n / i));
         }
     }
-    console.log(largestPrimeFactor);
+    return largestPrimeFactor;
 });
+
+for (const p of (Deno.args.length > 0)
+    ? problems.filter(p => p.number === parseInt(Deno.args[0]))
+    : problems
+) {
+    log(p);
+}
