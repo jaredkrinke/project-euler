@@ -4,12 +4,6 @@ interface Problem {
     solve: () => number;
 }
 
-function log(p: Problem) {
-    console.log(`${p.number}. ${p.title}:`);
-    console.log(p.solve());
-    console.log();
-}
-
 const problems: Problem[] = [];
 function add(number: number, title: string, solve: () => number) {
     problems.push({ number, title, solve });
@@ -103,9 +97,31 @@ add(4, "Largest palindrome product", () => {
     return 0;
 });
 
-for (const p of (Deno.args.length > 0)
-    ? problems.filter(p => p.number === parseInt(Deno.args[0]))
-    : problems
-) {
-    log(p);
-}
+add(5, "Smallest multiple", () => {
+    function* primesUpTo(max: number): Iterable<number> {
+        for (let i = 1; i <= max; i++) {
+            for (let j = 2; j < i; j++) {
+                if ((i % j) === 0) {
+                    break;
+                } else if (j === i - 1) {
+                    yield i;
+                }
+            }
+        }
+    }
+
+    const n = 20;
+    const primes = new Set(primesUpTo(n));
+    const productOfPrimes = [...primes].reduce((product, x) => product * x, 1);
+    const otherFactors = [...Array(n).keys()].map((_v, i) => i + 1).filter(x => !primes.has(x));
+    console.log(otherFactors);
+    while (true) {
+        for (let i = productOfPrimes;; i += productOfPrimes) {
+            if (otherFactors.filter(x => (i % x) === 0).length === otherFactors.length) {
+                return i;
+            }
+        }
+    }
+});
+
+export default problems;
