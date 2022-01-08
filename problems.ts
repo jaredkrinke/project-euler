@@ -255,3 +255,31 @@ add(11, "Largest product in a grid", () => {
     }
     return maxProduct;
 });
+
+add(12, "Highly divisible triangular number", () => {
+    function* triangleNumbers(): Iterable<number> {
+        let sum = 0;
+        for (let i = 1;; i++) {
+            yield sum += i;
+        }
+    }
+
+    function getDivisors(x: number): Set<number> {
+        const divisors = new Set<number>();
+        for (let i = 1; i <= Math.sqrt(x); i++) {
+            if ((x % i) === 0) {
+                divisors.add(i);
+                divisors.add(x / i);
+            }
+        }
+        return divisors;
+    }
+
+    const n = 500;
+    for (const x of triangleNumbers()) {
+        if (getDivisors(x).size > n) {
+            return x;
+        }
+    }
+    return 0;
+});
