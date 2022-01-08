@@ -97,19 +97,23 @@ add(4, "Largest palindrome product", () => {
     return 0;
 });
 
-add(5, "Smallest multiple", () => {
-    function* primesUpTo(max: number): Iterable<number> {
-        for (let i = 1; i <= max; i++) {
-            for (let j = 2; j < i; j++) {
-                if ((i % j) === 0) {
-                    break;
-                } else if (j === i - 1) {
-                    yield i;
-                }
+function* primesUpTo(max: number): Iterable<number> {
+    yield 2;
+    for (let i = 3; i <= max; i += 2) {
+        let prime = true;
+        for (let j = 2; j <= Math.sqrt(i); j++) {
+            if ((i % j) === 0) {
+                prime = false;
+                break;
             }
         }
+        if (prime) {
+            yield i;
+        }
     }
+}
 
+add(5, "Smallest multiple", () => {
     const n = 20;
     const primes = new Set(primesUpTo(n));
     const productOfPrimes = [...primes].reduce((product, x) => product * x, 1);
@@ -183,4 +187,9 @@ add(9, "Special Pythagorean triplet", () => {
         }
     }
     return 0;
+});
+
+add(10, "Summation of primes", () => {
+    const n = 2 * 1000 * 1000;
+    return [...primesUpTo(n)].reduce((sum, x) => sum + x);
 });
