@@ -73,6 +73,36 @@ add(3, "Largest prime factor", () => {
     return largestPrimeFactor;
 });
 
+add(4, "Largest palindrome product", () => {
+    function isPalindrome(x: number): boolean {
+        const numberString = x.toString(10);
+        return numberString === numberString.split("").reverse().join("");
+    }
+
+    const factorMin = 100;
+    const factorMax = 999;
+    function isProductOfTwoThreeDigitNumbers(x: number): boolean {
+        for (let i = factorMin; i <= factorMax; i++) {
+            if ((x % i) === 0) {
+                const other = x / i;
+                if (other >= factorMin && other <= factorMax) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    const min = factorMin * factorMin;
+    const max = factorMax * factorMax;
+    for (let i = max; i >= min; i--) {
+        if (isPalindrome(i) && isProductOfTwoThreeDigitNumbers(i)) {
+            return i;
+        }
+    }
+    return 0;
+});
+
 for (const p of (Deno.args.length > 0)
     ? problems.filter(p => p.number === parseInt(Deno.args[0]))
     : problems
