@@ -98,6 +98,7 @@ add(4, "Largest palindrome product", () => {
 });
 
 function* primesUpTo(max: number): Iterable<number> {
+    // TODO: sieve and/or only test primes
     yield 2;
     for (let i = 3; i <= max; i += 2) {
         let prime = true;
