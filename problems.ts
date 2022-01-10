@@ -466,3 +466,82 @@ add(15, "Lattice paths", () => {
 
     return countPaths(width, height);
 });
+
+add(16, "Power digit sum", () => {
+    // A bit overkill... also BigInt
+    const base = 10;
+    class NaiveDecimal {
+        constructor(public digits: number[]) {
+        }
+
+        static add(...list: NaiveDecimal[]): NaiveDecimal {
+            switch (list.length) {
+                case 0: return new NaiveDecimal([]);
+                case 1: return list[0];
+            }
+
+            const a = list[0];
+            const b = list[1];
+            const sum = new NaiveDecimal([]);
+            const maxLength = Math.max(a.digits.length, b.digits.length);
+            let remainder = 0;
+            for (let i = 0; i < maxLength; i++) {
+                const digitSum = remainder + (a.digits[i] ?? 0) + (b.digits[i] ?? 0);
+                sum.digits.push(digitSum % base);
+                remainder = Math.floor(digitSum / base);
+            }
+            if (remainder > 0) {
+                sum.digits.push(remainder);
+            }
+
+            return NaiveDecimal.add(sum, ...list.slice(2));
+        }
+
+        static multiply(...list: NaiveDecimal[]): NaiveDecimal {
+            switch (list.length) {
+                case 0: return new NaiveDecimal([]);
+                case 1: return list[0];
+            }
+
+            const a = list[0];
+            const b = list[1];
+            const digitProducts: NaiveDecimal[] = [];
+            for (let i = 0; i < a.digits.length; i++) {
+                const row = new NaiveDecimal([]);
+                digitProducts[i] = row;
+                let remainder = 0;
+                for (let j = 0; j < b.digits.length; j++) {
+                    const product = remainder + (a.digits[i] * b.digits[j]);
+                    row.digits.push(product % base);
+                    remainder = Math.floor(product / base);
+                }
+                if (remainder > 0) {
+                    row.digits.push(remainder);
+                }
+                for (let k = 0; k < i; k++) {
+                    row.digits.unshift(0);
+                }
+            }
+
+            const sum = NaiveDecimal.add(...digitProducts);
+            return NaiveDecimal.multiply(sum, ...list.slice(2));
+        }
+
+        sumDigits(): number {
+            return this.digits.reduce((sum, x) => sum + x, 0);
+        }
+
+        toString(): string {
+            return this.digits.length > 0 ? this.digits.slice().reverse().join("") : "0";
+        }
+    }
+
+    const two = new NaiveDecimal([2]);
+    let x = two;
+    const n = 1000;
+    for (let i = 1; i < n; i++) {
+        x = NaiveDecimal.multiply(x, two);
+    }
+
+    return x.sumDigits();
+});
