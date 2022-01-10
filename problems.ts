@@ -405,3 +405,64 @@ add(13, "Large sum", () => {
     }
     return parseInt(sum.slice(0, n));
 });
+
+add(14, "Longest Collatz sequence", () => {
+    function collatzSequence(x: number): number[] {
+        const sequence = [x];
+        while (x !== 1) {
+            let next: number;
+            if ((x % 2) === 0) {
+                next = x / 2;
+            } else {
+                next = 3 * x + 1;
+            }
+            sequence.push(next);
+            x = next;
+        }
+        return sequence;
+    }
+
+    let maxLength = 0;
+    let inputWithLongestSequence = 0;
+    for (let i = 1; i < 1000000; i++) {
+        const length = collatzSequence(i).length;
+        if (length > maxLength) {
+            inputWithLongestSequence = i;
+            maxLength = length;
+        }
+    }
+
+    return inputWithLongestSequence;
+});
+
+add(15, "Lattice paths", () => {
+    const width = 20;
+    const height = 20;
+
+    const memo: { [wh: number]: number } = {};
+    function countPaths(w: number, h: number): number {
+        const index = w << 8 | h;
+        const cached = memo[index];
+        if (cached !== undefined) {
+            return cached;
+        }
+
+        let paths = 0;
+        if (w > 0) {
+            paths += countPaths(w - 1, h);
+        } else {
+            return 1;
+        }
+
+        if (h > 0) {
+            paths += countPaths(w, h - 1);
+        } else {
+            return 1;
+        }
+
+        memo[index] = paths;
+        return paths;
+    }
+
+    return countPaths(width, height);
+});
