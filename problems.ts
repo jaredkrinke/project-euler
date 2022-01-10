@@ -545,3 +545,98 @@ add(16, "Power digit sum", () => {
 
     return x.sumDigits();
 });
+
+add(17, "Number letter counts", () => {
+    const numberWords = [
+        "",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+    ];
+
+    const tensWords = [
+        "",
+        "",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+    ];
+
+    const rankWords = [
+        "",
+        "",
+        "hundred",
+        "thousand",
+    ];
+
+    const andWord = "and";
+
+    function numberToEnglish(x: number): string {
+        const list: string[] = [];
+
+        let remainder = x;
+        for (let i = 3; i >= 2; i--) {
+            const power = Math.pow(10, i);
+            if (remainder >= power) {
+                list.push(numberWords[Math.floor(remainder / power)]);
+                list.push(rankWords[i]);
+                remainder = remainder % power;
+            }
+        }
+
+        if (remainder > 0) {
+            if (list.length > 0) {
+                // I don't like this part...
+                list.push(andWord);
+            }
+
+            if (numberWords[remainder]) {
+                list.push(numberWords[remainder]);
+            } else {
+                list.push(tensWords[Math.floor(remainder / 10)]);
+                remainder = remainder % 10;
+                if (remainder > 0) {
+                    list.push(numberWords[remainder]);
+                }
+            }
+        }
+
+        return list.join(" ");
+    }
+
+    const letterRegexp = /^[a-zA-Z]$/;
+    function countLetters(str: string): number {
+        return str.split("").filter(l => letterRegexp.test(l)).length;
+    }
+
+    const n = 1000;
+    const list: string[] = [];
+    for (let i = 1; i <= n; i++) {
+        const english = numberToEnglish(i);
+        list.push(english);
+        console.log(english);
+    }
+
+    return countLetters(list.join(", "));
+});
