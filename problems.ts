@@ -671,6 +671,67 @@ add(18, "Maximum path sum I", () => {
     return triangle[0][0];
 });
 
+add(19, "Counting Sundays", () => {
+    function isLeapYear(year: number): boolean {
+        return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0);
+    }
+
+    function getDaysInMonth(month: number, leapYear: boolean): number {
+        switch (month) {
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                return 30;
+
+            case 2: {
+                return leapYear ? 29 : 28;
+            }
+
+            default:
+                return 31;
+        }
+    }
+
+    const daysInWeek = 7;
+    const startYear = 1901;
+    const endYear = 2000;
+    let sundaysOnFirstOfMonth = 0;
+
+    let year = 1900;
+    let month = 1;
+    let day = 1;
+    let dayOfWeek = 2;
+    let leapYear = isLeapYear(year);
+    let daysInMonth = getDaysInMonth(month, leapYear);
+
+    while (year <= endYear) {
+        if (year >= startYear && dayOfWeek === 1 && day === 1) {
+            sundaysOnFirstOfMonth++;
+        }
+
+        // Advance day
+        if (++day > daysInMonth) {
+            day = 1;
+
+            const monthsInYear = 12;
+            if (++month > monthsInYear) {
+                year++;
+                month = 1;
+                leapYear = isLeapYear(year);
+            }
+
+            daysInMonth = getDaysInMonth(month, leapYear);
+        }
+
+        if (++dayOfWeek > daysInWeek) {
+            dayOfWeek = 1;
+        }
+    }
+
+    return sundaysOnFirstOfMonth;
+});
+
 add(67, "Maximum path sum II", () => {
     const text = `59
     73 41
