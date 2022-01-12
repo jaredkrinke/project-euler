@@ -671,6 +671,38 @@ add(20, "Factorial digit sum", () => {
     return NaiveDecimal.multiply(...[...Array(n).keys()].map((_value, index) => NaiveDecimal.fromNumber(index + 1))).sumDigits();
 });
 
+add(21, "Amicable numbers", () => {
+    function getProperDivisors(x: number): number[] {
+        const divisors: number[] = [];
+        for (let i = 1; i < x; i++) {
+            if (x % i === 0) {
+                divisors.push(i);
+            }
+        }
+        return divisors;
+    }
+
+    function getSumOfProperDivisors(x: number): number {
+        return getProperDivisors(x).reduce((sum, value) => sum + value, 0);
+    }
+
+    const n = 10000;
+    const d: { [a: number]: number } = {};
+    for (let i = 1; i < n; i++) {
+        d[i] = getSumOfProperDivisors(i);
+    }
+
+    let sum = 0;
+    for (let a = 1; a < n; a++) {
+        const b = d[a];
+        if (a !== b && d[b] === a) {
+            sum += a;
+        }
+    }
+
+    return sum;
+});
+
 add(67, "Maximum path sum II", () => {
     const text = `59
     73 41
