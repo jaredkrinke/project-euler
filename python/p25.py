@@ -1,13 +1,11 @@
 def fib():
-    a, b = 0, 1
+    a, b = 1, 1
     while True:
-        a, b = b, a + b
         yield a
+        a, b = b, a + b
 
 minDigits = 1000
-index = 0
-for n in fib():
-    index += 1
+for i, n in enumerate(fib()):
     if len(str(n)) >= minDigits:
-        print(index)
+        print(i + 1)
         break
