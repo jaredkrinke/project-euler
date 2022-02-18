@@ -5,7 +5,6 @@ n = 1000000
 
 digits = [str(n) for n in numbers]
 
-# Note: should really just count up to 1,000,000 and not return huge lists
 def permute(prefix, remaining):
     if len(remaining) == 0:
         yield prefix
@@ -13,9 +12,7 @@ def permute(prefix, remaining):
         for c in remaining:
             yield from permute(prefix + c, [other for other in remaining if other != c])
 
-i = 0
-for s in permute("", digits):
-    i += 1
-    if i == n:
+for i, s in enumerate(permute("", digits)):
+    if i + 1 == n:
         print(s)
         break
